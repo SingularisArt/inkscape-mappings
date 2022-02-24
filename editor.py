@@ -2,7 +2,7 @@ import os
 import tempfile
 import threading
 import subprocess
-# from Xlib import X
+from Xlib import X
 from config import config
 from clipboard import copy
 from constants import TARGET
@@ -11,8 +11,8 @@ from constants import TARGET
 running = threading.Event()
 
 
-# def open_editor(self, commands, compile_latex):
-def open_editor(commands, compile_latex):
+def open_editor(self, commands, compile_latex):
+# def open_editor(commands, compile_latex):
     temp_file = tempfile.NamedTemporaryFile(mode='w+t', delete=False,
                                             suffix='.tex')
 
@@ -34,9 +34,10 @@ def open_editor(commands, compile_latex):
                  xml:space="preserve"><tspan sodipodi:role="line" >{latex}</tspan></text>
             </svg>"""
             copy(svg, target=TARGET)
+        elif compile_latex:
+            copy(latex, target=TARGET)
     elif latex == '$$' or not latex:
         config['rofi'].error('No latex code found')
 
 
-open_editor('-u {}/.config/nvim/minimal-tex-init.lua'.format(config['home']),
-            True)
+commands = '-u {}/.config/nvim/minimal-tex-init.lua'.format(config['home'])

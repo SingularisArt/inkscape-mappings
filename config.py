@@ -54,4 +54,5 @@ config = {
     'rofi': rofi,
 }
 
+CONFIG_PATH = Path('~/.config/inkscape-shortcut-manager').expanduser()
 # TODO: Add support for config file at ~/.config/inkscape-mappings/config.py

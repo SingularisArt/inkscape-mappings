@@ -3,8 +3,10 @@ import subprocess
 
 def copy(string, target=None):
     extra_args = []
-    if not target:
-        extra_args += ['-target', target]
+
+    if target:
+        extra_args.append('-target')
+        extra_args.append(target)
 
     return subprocess.run(
         ['xclip', '-selection', 'c'] + extra_args,
@@ -15,8 +17,10 @@ def copy(string, target=None):
 
 def get(target=None):
     extra_args = []
-    if not target:
-        extra_args += ['-target', target]
+
+    if target:
+        extra_args.append('-target')
+        extra_args.append(target)
 
     result = subprocess.run(
         ['xclip', '-selection', 'c', '-o'] + extra_args,
@@ -24,6 +28,4 @@ def get(target=None):
         universal_newlines=True
     )
 
-    stdout = result.stdout.strip()
-
-    return stdout
+    return result.stdout.strip()
