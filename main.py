@@ -52,7 +52,7 @@ class Manager:
         self.inkscape.change_attributes(event_mask=X.KeyReleaseMask |
                                         X.KeyPressMask | X.StructureNotifyMask)
 
-    def ungrap(self):
+    def ungrab(self):
         self.inkscape.ungrab_key(X.AnyKey, X.AnyModifier, True)
 
     def listen(self):

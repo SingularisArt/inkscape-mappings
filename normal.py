@@ -89,16 +89,16 @@ def handle_single_key(self, ev):
         self.press('r')
     elif ev == 't':
         # Add text
-        open_editor(self, commands, compile_latex=False)
-    elif ev == 'T':
-        # Add compiled text
-        open_editor(self, commands, compile_latex=True)
+        open_editor(self, commands)
     elif ev == 'u':
         # Undo
         self.press('z', X.ControlMask)
     elif ev == 'x':
         # Snap
         self.press('percent', X.ShiftMask)
+    elif ev == 'Shift+;':
+        # Save
+        self.press('s', X.ControlMask)
     else:
         # Not handled
         return False
@@ -110,41 +110,43 @@ def paste_style(self, combination):
     w = 0.4 * pt
     thick_width = 0.8 * pt
     very_thick_width = 1.2 * pt
-    chunky = 1.6 * pt
 
     style = {
         'stroke-opacity': 1,
     }
 
-    # Line widths
-    if 'h' in combination:
+    if {'j', 'k', 'l'} & combination:
+        style['stroke'] = 'black'
         style['stroke-width'] = w
+        style['fill'] = 'white'
+        style['marker-end'] = 'none'
+        style['marker-start'] = 'none'
+        style['stroke-dasharray'] = 'none'
+    else:
+        style['stroke'] = 'none'
+
+    # Line widths
     if 'j' in combination:
-        w = thick_width
         style['stroke-width'] = w
     if 'k' in combination:
-        w = very_thick_width
+        w = thick_width
         style['stroke-width'] = w
     if 'l' in combination:
-        w = chunky
+        w = very_thick_width
         style['stroke-width'] = w
 
-    # Line colors
-    if 'a' in combination:
-        style['fill'] = 'black'
-        style['fill-opacity'] = 1
-    if 's' in combination:
-        style['fill'] = 'white'
-        style['fill-opacity'] = 1
-    if 'd' in combination:
-        style['fill'] = 'black'
-        style['fill-opacity'] = 0.2
-    if 'f' in combination:
+    # Stroke colors
+    if 'z' in combination:
+        style['stroke'] = 'black'
+    if 'x' in combination:
+        style['stroke'] = 'white'
+    if 'c' in combination:
+        style['stroke'] = 'black'
+        style['stroke-opacity'] = 0.2
+    if 'v' in combination:
         style['stroke'] = 'blue'
-        style['fill-opacity'] = 1
-    if 'g' in combination:
+    if 'b' in combination:
         style['stroke'] = 'red'
-        style['fill-opacity'] = 1
 
     # Line styles
     if 'q' in combination:
@@ -159,8 +161,25 @@ def paste_style(self, combination):
         style['marker-start'] = f'url(#marker-arrow-{w})'
         style['marker-end'] = f'url(#marker-arrow-{w})'
 
+    # Background fill
+    if 'a' in combination:
+        style['fill'] = 'black'
+        style['fill-opacity'] = 1
+    if 's' in combination:
+        style['fill'] = 'white'
+        style['fill-opacity'] = 1
+    if 'd' in combination:
+        style['fill'] = 'black'
+        style['fill-opacity'] = 0.2
+    if 'f' in combination:
+        style['fill'] = 'blue'
+        style['fill-opacity'] = 1
+    if 'g' in combination:
+        style['fill'] = 'red'
+        style['fill-opacity'] = 1
+
     # Clear all styles
-    if 'c' in combination:
+    if 'u' in combination:
         style['stroke'] = 'black'
         style['stroke-width'] = w
         style['fill'] = 'none'
