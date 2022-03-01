@@ -89,7 +89,10 @@ def handle_single_key(self, ev):
         self.press('r')
     elif ev == 't':
         # Add text
-        open_editor(self, commands)
+        open_editor(self, commands, compile_latex=False)
+    elif ev == 'Shift+t':
+        # Add text
+        open_editor(self, commands, compile_latex=True)
     elif ev == 'u':
         # Undo
         self.press('z', X.ControlMask)

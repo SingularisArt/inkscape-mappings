@@ -8,22 +8,22 @@ from clipboard import copy
 from constants import TARGET
 
 
-running = threading.Event()
 
+commands = '-u {}/.config/nvim/minimal-tex-init.lua'.format(config['home'])
 
 def open_editor(self, commands, compile_latex):
-# def open_editor(commands, compile_latex):
-    temp_file = tempfile.NamedTemporaryFile(mode='w+t', delete=False,
-                                            suffix='.tex')
+    f = tempfile.NamedTemporaryFile(mode='w+', delete=False, suffix='.tex')
 
-    config['open_editor'](commands, temp_file.name)
+    f.write('$$')
+    f.close()
+
+    config['open_editor'](commands, f.name)
 
     latex = ""
+    with open(f.name, 'r') as g:
+        latex = g.read().strip()
 
-    with open(temp_file.name, 'r') as reading_temp_file:
-        latex = reading_temp_file.read().strip()
-
-    os.remove(temp_file.name)
+    os.remove(f.name)
 
     if latex != '$$':
         if not compile_latex:
@@ -32,12 +32,31 @@ def open_editor(self, commands, compile_latex):
               <text
                  style="font-size:{config['font_size']}px; font-family:'{config['font']}';-inkscape-font-specification:'{config['font']}, Normal';fill:#000000;fill-opacity:1;stroke:none;"
                  xml:space="preserve"><tspan sodipodi:role="line" >{latex}</tspan></text>
-            </svg>"""
+            </svg> """
             copy(svg, target=TARGET)
-        elif compile_latex:
-            copy(latex, target=TARGET)
-    elif latex == '$$' or not latex:
-        config['rofi'].error('No latex code found')
+        if compile_latex:
+            m = tempfile.NamedTemporaryFile(mode='w+', delete=False)
+            m.write(config['latex_document'](latex))
+            m.close()
 
+            working_directory = tempfile.gettempdir()
+            subprocess.run(
+                ['pdflatex', m.name],
+                cwd=working_directory,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
+            )
 
-commands = '-u {}/.config/nvim/minimal-tex-init.lua'.format(config['home'])
+            subprocess.run(
+                ['pdf2svg', f'{m.name}.pdf', f'{m.name}.svg'],
+                cwd=working_directory
+            )
+
+            with open(f'{m.name}.svg') as svg:
+                subprocess.run(
+                    ['xclip', '-selection', 'c', '-target', TARGET],
+                    stdin=svg
+                )
+
+        self.press('v', X.ControlMask)
+    self.press('Escape')
