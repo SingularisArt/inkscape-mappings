@@ -1,4 +1,3 @@
-import os
 import subprocess
 from rofi import Rofi
 from pathlib import Path

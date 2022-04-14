@@ -1,15 +1,11 @@
 import os
 import tempfile
-import threading
 import subprocess
 from Xlib import X
 from config import config
 from clipboard import copy
 from constants import TARGET
 
-
-
-commands = '-u {}/.config/nvim/minimal-tex-init.lua'.format(config['home'])
 
 def open_editor(self, commands, compile_latex):
     f = tempfile.NamedTemporaryFile(mode='w+', delete=False, suffix='.tex')
