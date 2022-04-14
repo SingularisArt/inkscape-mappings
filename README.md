@@ -1,2 +1,1 @@
-# inkscape-mappings
-Simple inkscape mapping manager
+# Simple inkscape mapping manager
