@@ -56,3 +56,6 @@ def open_editor(self, commands, compile_latex):
 
         self.press('v', X.ControlMask)
     self.press('Escape')
+
+
+commands = '-u {}/.config/nvim/minimal-tex-init.lua'.format(config['home'])
