@@ -109,7 +109,7 @@ def handle_single_key(self, ev):
 
 
 def paste_style(self, combination):
-    pt = 1.327
+    pt = 3
     w = 0.4 * pt
     thick_width = 0.8 * pt
     very_thick_width = 1.2 * pt
